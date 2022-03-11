@@ -50,6 +50,7 @@ nvm alias default 14.15.5
 ## Svelte CLI
 * https://svelte.dev/docs
 * https://v2.svelte.dev/guide
+* https://beomy.github.io/tech/svelte/start-svelte
 ```sh
 # Svelte 프로젝트 생성
 npx degit sveltejs/template svelte-study
@@ -165,4 +166,42 @@ input[type=text] {
   border-top: 1px solid rgb(118, 118, 118);
   min-width: 100px;
 }
+```
+
+## Svelte Component 만들기
+Header.svelte, Nav.svelte, Footer.svelte 이렇게 Component 별로 파일을 나눈다.
+
+src/App.svelte
+```svelte
+<script>
+import Header from './components/Header.svelte';
+import Nav from './components/Nav.svelte';
+import Footer from './components/Footer.svelte';
+</script>
+```
+
+src/components/Header.svelte
+```html
+<header>
+  <h1>Vue.js study</h1>
+</header>
+```
+
+src/App.svelte
+```diff
+- <header>
+-  <h1>Svelte study</h1>
+- </header>
++ <Header></Header>
+
+- <nav class="nav">
+-   <ul>
+-     <li><h2>Members</h2></li>
+-     <li><h2>Search</h2></li>
+-   </ul>
+- </nav>
++ <Nav></Nav>
+
+- <footer>Copyright</footer>
++ <Footer></Footer>
 ```
