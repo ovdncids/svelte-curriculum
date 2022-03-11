@@ -297,3 +297,62 @@ import active from 'svelte-spa-router/active'
 ```
 
 **여기 까지가 Markup 개발자 분들이 할일 입니다.**
+
+## Members Store 만들기
+**Store 개념 설명**
+
+Component가 사용하는 글로벌 함수 또는 변수라고 생각하면 쉽다, state 값이 변하면 해당 값을 바라 보는 모든 Component가 수정 된다.
+
+src/store/members.js
+```js
+import { writable } from 'svelte/store';
+
+export const members = writable([]);
+export const member = writable({
+  name: '',
+  age: ''
+});
+```
+
+## Members Component Store inject
+src/components/contents/Members.svelte
+```svelte
+<script>
+import {members, member} from '../../store/members';
+console.log($members, $member);
+</script>
+
+<div>
+  <h3>Members</h3>
+  <hr class="d-block" />
+  <div>
+    <h4>Read</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Modify</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>홍길동</td>
+          <td>20</td>
+          <td>
+            <button>Update</button>
+            <button>Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <hr class="d-block" />
+  <div>
+    <h4>Create</h4>
+    <input type="text" placeholder="Name" />
+    <input type="text" placeholder="Age" />
+    <button>Create</button>
+  </div>
+</div>
+```
