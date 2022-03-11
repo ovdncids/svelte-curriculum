@@ -224,3 +224,73 @@ export let title;
 
 <footer>{title || 'Copyright'}</footer>
 ```
+
+## svelte-spa-router
+https://github.com/ItalyPaleAle/svelte-spa-router
+
+### 설치
+```sh
+npm install svelte-spa-router
+```
+
+### Router 만들기
+src/routes.js
+```js
+import Home from './components/contents/Home.svelte';
+import Members from './components/contents/Members.svelte';
+import Search from './components/contents/Search.svelte';
+
+const routes = {
+  '/': Home,
+  '/members': Members,
+  '/search': Search
+};
+
+export default routes;
+```
+
+src/components/contents/Home.svelte
+```html
+<div>
+  <h3>Home</h3>
+  <p>Contents</p>
+</div>
+```
+src/components/contents/Members.svelte (동일)
+
+src/components/contents/Search.svelte (동일)
+
+src/App.svelte
+```js
+import Router from 'svelte-spa-router';
+import routes from './routes';
+```
+```diff
+  <section class="contents">
+-   <div>
+-     <h3>Members</h3>
+-     <p>Contents</p>
+-   </div>
++   <Router {routes}/>
+```
+
+**주소 창에서 router 바꾸어 보기**
+* http://localhost:8080/#/members
+
+src/components/Nav.svelte (덮어 씌우기)
+```svelte
+<script>
+import {link} from 'svelte-spa-router'
+import active from 'svelte-spa-router/active'
+</script>
+
+<nav class="nav">
+  <ul>
+    <li><h2><a href="/" use:link use:active>Home</a></h2></li>
+    <li><h2><a href="/members" use:link use:active>Members</a></h2></li>
+    <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
+  </ul>
+</nav>
+```
+
+**여기 까지가 Markup 개발자 분들이 할일 입니다.**
