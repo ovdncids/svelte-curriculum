@@ -48,8 +48,8 @@ nvm alias default 14.15.5
 ```
 
 ## Svelte CLI
-https://angular.io/guide/setup-local
-
+* https://svelte.dev/docs
+* https://v2.svelte.dev/guide
 ```sh
 # Svelte 프로젝트 생성
 npx degit sveltejs/template svelte-study
@@ -59,4 +59,110 @@ code .
 # VSCode로 해당 디렉토리 열기
 npm install
 npm run dev
+```
+* `npm run build` 설명
+
+## GIT
+소스 관리를 위해 사용한다. 어느 파일이 언제 어떻게 변경 되었는지 쉽게 볼 수 있다.
+
+**GIT 설치**
+
+**VSCode 확장 Git Graph 설치**
+
+```sh
+git init
+```
+
+## Markup
+src/App.svelte (덮어 씌우기)
+```svelte
+<script>
+</script>
+
+<div id="app">
+  <header>
+    <h1>Svelte study</h1>
+  </header>
+  <hr />
+  <div class="container">
+    <nav class="nav">
+      <ul>
+        <li><h2>Members</h2></li>
+        <li><h2>Search</h2></li>
+      </ul>
+    </nav>
+    <hr />
+    <section class="contents">
+      <div>
+        <h3>Members</h3>
+        <p>Contents</p>
+      </div>
+    </section>
+    <hr />
+  </div>
+  <footer>Copyright</footer>
+</div>
+```
+
+public/global.css (덮어 씌우기)
+```css
+* {
+  margin: 0;
+  font-family: -apple-system,BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+a:link, a:visited {
+  text-decoration: none;
+  color: black;
+}
+a.active {
+  color: white;
+}
+h1, footer, .nav ul {
+  padding: 0.5rem;
+}
+h4, li {
+  margin: 0.5rem 0;
+}
+hr {
+  display: none;
+  margin: 1rem 0;
+  border: 0;
+  border-top: 1px solid #ccc;
+}
+input[type=text] {
+  width: 120px;
+}
+
+.d-block {
+  display: block;
+}
+.container {
+  display: flex;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.nav {
+  min-height: 300px;
+  background-color: #4285F4;
+}
+.nav ul {
+  list-style: none;
+}
+.contents {
+  flex: 1;
+  padding: 1rem;
+}
+
+.table-search {
+  border: 1px solid rgb(118, 118, 118);
+  border-collapse: collapse;
+  text-align: center;
+}
+.table-search th, .table-search td {
+  padding: 0.2rem;
+}
+.table-search td {
+  border-top: 1px solid rgb(118, 118, 118);
+  min-width: 100px;
+}
 ```
