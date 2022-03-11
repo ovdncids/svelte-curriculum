@@ -205,3 +205,22 @@ src/App.svelte
 - <footer>Copyright</footer>
 + <Footer></Footer>
 ```
+
+### #if, props
+src/App.svelte
+```svelte
+{#if false}
+<Header></Header>
+{/if}
+
+<Footer title={'카피라이트'}></Footer>
+```
+
+src/components/Footer.svelte (덮어 씌우기)
+```svelte
+<script>
+export let title;
+</script>
+
+<footer>{title || 'Copyright'}</footer>
+```
