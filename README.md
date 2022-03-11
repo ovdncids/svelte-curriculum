@@ -227,6 +227,9 @@ export let title;
 
 ## svelte-spa-router
 https://github.com/ItalyPaleAle/svelte-spa-router
+<!--
+https://www.routify.dev
+-->
 
 ### 설치
 ```sh
