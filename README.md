@@ -307,18 +307,23 @@ src/store/members.js
 ```js
 import { writable } from 'svelte/store';
 
-export const members = writable([]);
-export const member = writable({
-  name: '',
-  age: ''
-});
+class MembersStore {
+  members = writable([]);
+  member = writable({
+    name: '',
+    age: ''
+  });
+}
+
+export default new MembersStore();
 ```
 
-## Members Component Store inject
+### Members Component Store inject
 src/components/contents/Members.svelte
 ```svelte
 <script>
-import {members, member} from '../../store/members';
+import membersStore from '../../store/members';
+const {members, member} = membersStore;
 console.log($members, $member);
 </script>
 
@@ -355,4 +360,29 @@ console.log($members, $member);
     <button>Create</button>
   </div>
 </div>
+```
+
+## Members Store CRUD
+### Cread
+src/store/members.js
+```js
+membersCreate = (member) => {
+  this.members.update(members => {
+    members.push(member);
+    console.log('Done membersCreate', members);
+    return members;
+  })
+}
+```
+
+src/components/contents/Members.svelte
+```svelte
+<input type="text" placeholder="Name" bind:value={$member.name} />
+<input type="text" placeholder="Age" bind:value={$member.age} />
+<button on:click="{() => membersStore.membersCreate($member)}">Create</button>
+```
+
+* `Footer.svelte` Store 적용 해보기
+```svelte
+<footer>Copyright {$member.name}</footer>
 ```
