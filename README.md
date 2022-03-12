@@ -303,7 +303,7 @@ import active from 'svelte-spa-router/active'
 
 Component가 사용하는 글로벌 함수 또는 변수라고 생각하면 쉽다, state 값이 변하면 해당 값을 바라 보는 모든 Component가 수정 된다.
 
-src/store/members.js
+src/store/membersStore.js
 ```js
 import { writable } from 'svelte/store';
 
@@ -322,7 +322,7 @@ export default new MembersStore();
 src/components/contents/Members.svelte
 ```svelte
 <script>
-import membersStore from '../../store/members';
+import membersStore from '../../store/membersStore';
 const {members, member} = membersStore;
 console.log($members, $member);
 </script>
@@ -364,7 +364,7 @@ console.log($members, $member);
 
 ## Members Store CRUD
 ### Cread
-src/store/members.js
+src/store/membersStore.js
 ```js
 membersCreate = (member) => {
   this.members.update(members => {
@@ -372,7 +372,7 @@ membersCreate = (member) => {
     console.log('Done membersCreate', members);
     return members;
   })
-}
+};
 ```
 
 src/components/contents/Members.svelte
@@ -385,4 +385,95 @@ src/components/contents/Members.svelte
 * `Footer.svelte` Store 적용 해보기
 ```svelte
 <footer>Copyright {$member.name}</footer>
+```
+
+### Read
+src/store/membersStore.js
+```js
+membersRead = () => {
+  this.members.update(() => {
+    const members = [{
+      name: '홍길동',
+      age: 20
+    }, {
+      name: '춘향이',
+      age: 16
+    }];
+    console.log('Done membersRead', members);
+    return members;
+  })
+};
+```
+
+src/components/contents/Members.svelte
+```js
+membersStore.membersRead();
+```
+```diff
+- <tr>
+-   <td>홍길동</td>
+-   <td>20</td>
+-   <td>
+-     <button>Update</button>
+-     <button>Delete</button>
+-   </td>
+- </tr>
+```
+```svelte
+{#each $members as member, index}
+  <tr>
+    <td>{member.name}</td>
+    <td>{member.age}</td>
+    <td>
+      <button>Update</button>
+      <button>Delete</button>
+    </td>
+  </tr>
+{/each}
+```
+
+### Delete
+src/store/membersStore.js
+```js
+membersDelete = (index) => {
+  this.members.update(members => {
+    members.splice(index, 1);
+    console.log('Done membersDelete', members);
+    return members;
+  })
+};
+```
+
+src/components/contents/Members.svelte
+```diff
+- <button>Delete</button>
++ <button on:click="{() => membersStore.membersDelete(index)}">Delete</button>
+```
+
+### Update
+src/store/membersStore.js
+```js
+membersUpdate = (index, member) => {
+  this.members.update(members => {
+    members[index] = member;
+    console.log('Done membersUpdate', members);
+    return members;
+  })
+};
+```
+
+src/components/contents/Members.svelte
+```diff
+- <td>{{member.name}}</td>
+- <td>{{member.age}}</td>
+```
+```svelte
+<td><input type="text" placeholder="Name" bind:value={member.name} /></td>
+<td><input type="text" placeholder="Age" bind:value={member.age} /></td>
+```
+```diff
+- <button>Update</button>
+```
+```svelte
+<button on:click="{() => membersStore.membersUpdate(index, member)}">Update</button>
 ```
