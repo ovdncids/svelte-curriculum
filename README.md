@@ -183,7 +183,7 @@ import Footer from './components/Footer.svelte';
 src/components/Header.svelte
 ```html
 <header>
-  <h1>Vue.js study</h1>
+  <h1>Svelte study</h1>
 </header>
 ```
 
