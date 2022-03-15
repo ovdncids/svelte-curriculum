@@ -303,7 +303,7 @@ import active from 'svelte-spa-router/active'
 
 Component가 사용하는 글로벌 함수 또는 변수라고 생각하면 쉽다, state 값이 변하면 해당 값을 바라 보는 모든 Component가 수정 된다.
 
-src/store/membersStore.js
+src/stores/membersStore.js
 ```js
 import { writable } from 'svelte/store';
 
@@ -364,14 +364,14 @@ console.log($members, $member);
 
 ## Members Store CRUD
 ### Cread
-src/store/membersStore.js
+src/stores/membersStore.js
 ```js
-membersCreate = (member) => {
+membersCreate(member) {
   this.members.update(members => {
     members.push(member);
     console.log('Done membersCreate', members);
     return members;
-  })
+  });
 };
 ```
 
@@ -388,9 +388,9 @@ src/components/contents/Members.svelte
 ```
 
 ### Read
-src/store/membersStore.js
+src/stores/membersStore.js
 ```js
-membersRead = () => {
+membersRead() {
   this.members.update(() => {
     const members = [{
       name: '홍길동',
@@ -401,7 +401,7 @@ membersRead = () => {
     }];
     console.log('Done membersRead', members);
     return members;
-  })
+  });
 };
 ```
 
@@ -433,14 +433,14 @@ membersStore.membersRead();
 ```
 
 ### Delete
-src/store/membersStore.js
+src/stores/membersStore.js
 ```js
-membersDelete = (index) => {
+membersDelete(index) {
   this.members.update(members => {
     members.splice(index, 1);
     console.log('Done membersDelete', members);
     return members;
-  })
+  });
 };
 ```
 
@@ -451,14 +451,14 @@ src/components/contents/Members.svelte
 ```
 
 ### Update
-src/store/membersStore.js
+src/stores/membersStore.js
 ```js
-membersUpdate = (index, member) => {
+membersUpdate(index, member) {
   this.members.update(members => {
     members[index] = member;
     console.log('Done membersUpdate', members);
     return members;
-  })
+  });
 };
 ```
 
@@ -476,4 +476,58 @@ src/components/contents/Members.svelte
 ```
 ```svelte
 <button on:click="{() => membersStore.membersUpdate(index, member)}">Update</button>
+```
+
+## Backend Server
+* [Download](https://github.com/ovdncids/vue-curriculum/raw/master/download/express-server.zip)
+```sh
+# BE 서버 실행 방법
+npm install
+node index.js
+# 터미널 종료
+Ctrl + c
+```
+
+## Axios 서버 연동
+https://github.com/axios/axios
+```sh
+npm install axios
+```
+
+### Axios common 에러 처리
+src/stores/common.js
+```js
+export const axiosError = (error) => {
+  console.error(error.response || error.message || error);
+};
+```
+
+### Create
+src/stores/MembersStore.js
+```js
+import axios from 'axios';
+import { axiosError } from './common.js';
+```
+### Create
+src/stores/MembersStore.js
+```js
+import axios from 'axios';
+import { axiosError } from './common.js';
+```
+```diff
+membersCreate(member) {
+-   this.members.update(members => {
+-     members.push(member);
+-     console.log('Done membersCreate', members);
+-     return members;
+-   });
+};
+```
+```js
+axios.post('http://localhost:3100/api/v1/members', member).then((response) => {
+  console.log('Done membersCreate', response);
+  this.membersRead();
+}).catch((error) => {
+  axiosError(error);
+});
 ```
