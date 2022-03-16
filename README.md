@@ -660,3 +660,25 @@ console.log($members);
   </div>
 </div>
 ```
+
+### Search Component에서만 사용 가능한 state값 적용
+src/components/contents/Search.svelte
+```js
+let q = '';
+const searchRead = (event) => {
+  event.preventDefault();
+  searchStore.searchRead(q);
+};
+```
+```diff
+- <form>
+-   <input type="text" placeholder="Search" />
+-   <button>Search</button>
+- </form>
+```
+```svelte
+<form on:submit="{(event) => searchRead(event)}">
+  <input type="text" placeholder="Search" bind:value={q} />
+  <button>Search</button>
+</form>
+```
