@@ -516,16 +516,82 @@ import { axiosError } from './common.js';
 ```
 ```diff
 membersCreate(member) {
--   this.members.update(members => {
--     members.push(member);
--     console.log('Done membersCreate', members);
--     return members;
--   });
+- this.members.update(members => {
+-   members.push(member);
+-   console.log('Done membersCreate', members);
+-   return members;
+- });
 };
 ```
 ```js
 axios.post('http://localhost:3100/api/v1/members', member).then((response) => {
   console.log('Done membersCreate', response);
+  this.membersRead();
+}).catch((error) => {
+  axiosError(error);
+});
+```
+
+### Read
+src/stores/MembersStore.js
+```diff
+membersRead() {
+- this.members.update(() => {
+-   const members = [{
+-     name: '홍길동',
+-     age: 20
+-   }, {
+-     name: '춘향이',
+-     age: 16
+-   }];
+-   console.log('Done membersRead', members);
+-   return members;
+- });
+};
+```
+```js
+axios.get('http://localhost:3100/api/v1/members').then((response) => {
+  console.log('Done membersRead', response);
+  this.members.set(response.data.members);
+}).catch((error) => {
+  axiosError(error);
+});
+```
+
+### Update
+src/stores/MembersStore.js
+```diff
+membersUpdate(index, member) {
+- this.members.update(members => {
+-   members[index] = member;
+-   console.log('Done membersUpdate', members);
+-   return members;
+- });
+};
+```
+```js
+axios.patch('http://localhost:3100/api/v1/members/' + index, member).then((response) => {
+  console.log('Done membersUpdate', response);
+  this.membersRead();
+}).catch((error) => {
+  axiosError(error);
+});
+```
+
+### Delete
+src/stores/MembersStore.js
+```diff
+membersDelete(index) {
+- this.members.update(members => {
+-   members.splice(index, 1);
+-   console.log('Done membersDelete', members);
+-   return members;
+- });
+};
+```
+```js
+axios.delete('http://localhost:3100/api/v1/members/' + index).then((response) => {
+  console.log('Done membersDelete', response);
   this.membersRead();
 }).catch((error) => {
   axiosError(error);
