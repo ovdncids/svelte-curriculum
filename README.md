@@ -322,7 +322,7 @@ export default new MembersStore();
 src/components/contents/Members.svelte
 ```svelte
 <script>
-import membersStore from '../../store/membersStore';
+import membersStore from '../../store/membersStore.js';
 const {members, member} = membersStore;
 console.log($members, $member);
 </script>
@@ -596,4 +596,67 @@ axios.delete('http://localhost:3100/api/v1/members/' + index).then((response) =>
 }).catch((error) => {
   axiosError(error);
 });
+```
+
+## Search Store 만들기
+src/stores/SearchStore.js
+```js
+import axios from 'axios';
+import { axiosError } from './common.js';
+import membersStore from './membersStore.js';
+
+class SearchStore {
+  searchRead(q) {
+    const url = `http://localhost:3100/api/v1/search?q=${q}`;
+    axios.get(url).then((response) => {
+      console.log('Done searchRead', response);
+      membersStore.members.set(response.data.members);
+    }).catch((error) => {
+      axiosError(error);
+    });
+  }
+}
+
+export default new SearchStore();
+```
+
+src/components/contents/Search.svelte
+```svelte
+<script>
+import membersStore from '../../store/membersStore.js';
+import searchStore from '../../store/searchStore.js';
+const {members} = membersStore;
+searchStore.searchRead('');
+console.log($members);
+</script>
+
+<div>
+  <h3>Search</h3>
+  <hr class="d-block" />
+  <div>
+    <form>
+      <input type="text" placeholder="Search" />
+      <button>Search</button>
+    </form>
+  </div>
+  <hr class="d-block" />
+  <div>
+    <table class="table-search">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+      {#each $members as member, index}
+        <tr>
+          <td>{member.name}</td>
+          <td>{member.age}</td>
+        </tr>
+      {/each}
+      </tbody>
+    </table>
+  </div>
+</div>
 ```
