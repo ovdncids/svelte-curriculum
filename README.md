@@ -274,7 +274,7 @@ import routes from './routes';
 -     <h3>Members</h3>
 -     <p>Contents</p>
 -   </div>
-+   <Router {routes}/>
++   <Router {routes} />
 ```
 
 **주소 창에서 router 바꾸어 보기**
@@ -323,6 +323,7 @@ src/components/contents/Members.svelte
 ```svelte
 <script>
 import membersStore from '../../store/membersStore.js';
+
 const {members, member} = membersStore;
 console.log($members, $member);
 </script>
@@ -625,6 +626,7 @@ src/components/contents/Search.svelte
 <script>
 import membersStore from '../../store/membersStore.js';
 import searchStore from '../../store/searchStore.js';
+
 const {members} = membersStore;
 searchStore.searchRead('');
 console.log($members);
@@ -661,7 +663,7 @@ console.log($members);
 </div>
 ```
 
-### Search Component에서만 사용 가능한 state값 적용
+## Search Component에서만 사용 가능한 state값 적용
 src/components/contents/Search.svelte
 ```js
 let q = '';
@@ -681,4 +683,32 @@ const searchRead = (event) => {
   <input type="text" placeholder="Search" bind:value={q} />
   <button>Search</button>
 </form>
+```
+
+## Search Compenent 쿼리스트링 변경과 새로고침 적용
+src/components/contents/Search.svelte
+```diff
++ import {push, querystring} from 'svelte-spa-router';
+```
+```diff
+- searchStore.searchRead('');
+```
+```diff
+- searchStore.searchRead(q);
++ push(`/search?q=${q}`);
+```
+* `검색`, `뒤로가기` 해보기
+
+```js
+const watchQuerystring = (querystring) => {
+  q = new URLSearchParams(querystring).get('q') || '';
+  searchStore.searchRead(q);
+}
+$: watchQuerystring($querystring);
+```
+
+src/components/Nav.svelte
+```diff
+- <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
++ <li><h2><a href="/search" use:link use:active={/search*/}>Search</a></h2></li>
 ```
