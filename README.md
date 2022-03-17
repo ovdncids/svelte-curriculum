@@ -718,4 +718,31 @@ src/components/Nav.svelte
 ## Proxy 설정
 * https://github.com/sveltejs/svelte/issues/3717
 
+```sh
+npm install rollup-plugin-dev --save-dev
+```
+
+rollup.config.js
+```js
+import dev from 'rollup-plugin-dev';
+
+  plugins: [
+    !production && dev({
+      dirs: ['public'],
+      host: 'localhost',
+      port: 8080,
+      proxy: [{
+        from: '/api',
+        to: 'http://localhost:3100/api'
+      }]
+    })
+  ]
+```
+
+모든 파일 수정
+```diff
+- http://localhost:3100/api
++ /api
+```
+
 # 수고 하셨습니다.
