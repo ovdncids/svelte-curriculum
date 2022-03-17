@@ -1,4 +1,5 @@
 # Svelte
+* [데모](https://ovdncids.github.io/svelte-curriculum/demo)
 
 ## Node.js
 https://nodejs.org
@@ -712,3 +713,6 @@ src/components/Nav.svelte
 - <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
 + <li><h2><a href="/search" use:link use:active={/search*/}>Search</a></h2></li>
 ```
+* `active` 조건은 정규식이 가능하다.
+
+# 수고 하셨습니다.
