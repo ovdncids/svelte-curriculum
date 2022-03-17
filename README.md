@@ -713,6 +713,9 @@ src/components/Nav.svelte
 - <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
 + <li><h2><a href="/search" use:link use:active={/search*/}>Search</a></h2></li>
 ```
-* `active` 조건은 정규식이 가능하다.
+* `active` 조건은 `정규식`이 가능하다.
+
+## Proxy 설정
+* https://github.com/sveltejs/svelte/issues/3717
 
 # 수고 하셨습니다.
