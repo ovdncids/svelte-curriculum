@@ -708,6 +708,7 @@ const watchQuerystring = (querystring) => {
 $: watchQuerystring($querystring);
 ```
 
+### Navigator active 수정
 src/components/Nav.svelte
 ```diff
 - <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
