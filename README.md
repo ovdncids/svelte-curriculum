@@ -789,6 +789,6 @@ src/App.svelte
   Mac: /Users/사용자/.nvm/versions/node/v14.15.1/bin/node
 ```
 * ❕ `Mac`은 터미널에서 `which node` 명령으로 `Node` 경로 확인 가능
-* ❕ VSCode 재시작
+* ❕ `VSCode` 재시작
 
 # 수고 하셨습니다.
