@@ -746,4 +746,47 @@ import dev from 'rollup-plugin-dev';
 + /api
 ```
 
+## SCSS 설정
+* https://github.com/sveltejs/svelte-preprocess/blob/main/docs/getting-started.md
+* https://jforj.tistory.com/179
+* https://jforj.tistory.com/184
+
+```sh
+npm install -D svelte-preprocess node-sass
+```
+
+src/App.scss
+```scss
+div {
+  color: red;
+}
+```
+
+rollup.config.js
+```js
+import sveltePreprocess from 'svelte-preprocess';
+
+  plugins: [
+    svelte({
+      preprocess: sveltePreprocess({
+        scss: {
+          prependData: `@import 'src/App.scss';`
+        }
+      })
+    })
+```
+
+src/App.svelte
+```svelte
+<style lang="scss"></style>
+```
+* ❕ `<style lang="scss"></style>` 있어야 `src/App.scss` 파일을 읽는다.
+
+#### `lang="scss"` 오류 설정
+```sh
+확장 > Svelte for VS Code > 확장 설정 > Svelte › Language-server: Ls-path
+  Windows: C:\Program Files\nodejs
+  Mac: 
+```
+
 # 수고 하셨습니다.
