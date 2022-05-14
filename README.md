@@ -780,7 +780,7 @@ src/App.svelte
 <style lang="scss">
 </style>
 ```
-* ❕ `모든 .svelte 파일`에서 사용할 `.scss 파일`은 `global` 안에서 선언 해야 한다.
+* ❕ `모든 .svelte 파일`에서 사용할 `.scss 파일`은 `global`속성 안에서 선언 해야 한다.
 
 #### `lang="scss"` 오류 설정
 ```sh
