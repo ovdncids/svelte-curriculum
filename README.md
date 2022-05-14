@@ -780,7 +780,7 @@ src/App.svelte
 ```svelte
 <style lang="scss"></style>
 ```
-* ❕ `<style lang="scss"></style>` 있어야 `src/App.scss` 파일을 읽는다.
+* ❕ `모든 .svelte 파일`에 `<style lang="scss"></style>` 있어야 `src/App.scss` 파일을 읽는다.
 
 #### `lang="scss"` 오류 설정
 ```sh
