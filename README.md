@@ -609,7 +609,7 @@ axios.patch('http://localhost:3100/api/v1/members/' + index, member).then((respo
 ```
 
 ## Search Store 만들기
-src/stores/SearchStore.js
+src/stores/searchStore.js
 ```js
 import axios from 'axios';
 import { axiosError } from './common.js';
@@ -633,8 +633,8 @@ export default new SearchStore();
 src/components/contents/Search.svelte
 ```svelte
 <script>
-import membersStore from '../../store/membersStore.js';
-import searchStore from '../../store/searchStore.js';
+import membersStore from '../../stores/membersStore.js';
+import searchStore from '../../stores/searchStore.js';
 
 const {members} = membersStore;
 searchStore.searchRead('');
