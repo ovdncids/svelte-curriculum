@@ -328,7 +328,7 @@ export default new MembersStore();
 src/components/contents/Members.svelte
 ```svelte
 <script>
-import membersStore from '../../store/membersStore.js';
+import membersStore from '../../stores/membersStore.js';
 
 const {members, member} = membersStore;
 console.log($members, $member);
@@ -375,7 +375,10 @@ src/stores/membersStore.js
 ```js
 membersCreate(member) {
   this.members.update(members => {
-    members.push(member);
+    members.push({
+      name: member.name,
+      age: member.age
+    });
     console.log('Done membersCreate', members);
     return members;
   });
