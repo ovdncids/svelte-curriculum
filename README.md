@@ -568,26 +568,6 @@ axios.get('http://localhost:3100/api/v1/members').then((response) => {
 });
 ```
 
-### Update
-src/stores/MembersStore.js
-```diff
-membersUpdate(index, member) {
-- this.members.update(members => {
--   members[index] = member;
--   console.log('Done membersUpdate', members);
--   return members;
-- });
-};
-```
-```js
-axios.patch('http://localhost:3100/api/v1/members/' + index, member).then((response) => {
-  console.log('Done membersUpdate', response);
-  this.membersRead();
-}).catch((error) => {
-  axiosError(error);
-});
-```
-
 ### Delete
 src/stores/MembersStore.js
 ```diff
@@ -602,6 +582,26 @@ membersDelete(index) {
 ```js
 axios.delete('http://localhost:3100/api/v1/members/' + index).then((response) => {
   console.log('Done membersDelete', response);
+  this.membersRead();
+}).catch((error) => {
+  axiosError(error);
+});
+```
+
+### Update
+src/stores/MembersStore.js
+```diff
+membersUpdate(index, member) {
+- this.members.update(members => {
+-   members[index] = member;
+-   console.log('Done membersUpdate', members);
+-   return members;
+- });
+};
+```
+```js
+axios.patch('http://localhost:3100/api/v1/members/' + index, member).then((response) => {
+  console.log('Done membersUpdate', response);
   this.membersRead();
 }).catch((error) => {
   axiosError(error);
