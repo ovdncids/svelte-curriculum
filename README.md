@@ -760,7 +760,7 @@ import dev from 'rollup-plugin-dev';
 * https://jforj.tistory.com/184
 
 ```sh
-npm install -D svelte-preprocess node-sass
+npm install -D svelte-preprocess node-sass postcss
 ```
 
 src/App.scss
