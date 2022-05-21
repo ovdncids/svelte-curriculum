@@ -785,8 +785,6 @@ src/App.svelte
 <style global lang="scss">
 @import 'src/App.scss';
 </style>
-<style lang="scss">
-</style>
 ```
 * ❕ `모든 .svelte 파일`에서 사용할 `.scss 파일`은 `global`속성 안에서 선언 해야 한다.
 
