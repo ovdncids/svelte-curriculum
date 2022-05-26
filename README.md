@@ -61,7 +61,7 @@ code .
 # Typescript로 변경
 node scripts/setupTypeScript.js
 ## src/main.ts
-## import App from './App.svelte'; 오류 난다면 일단 무시 하자
+## import App from './App.svelte'; (Windows에서 오류 난다면 일단 무시 하자)
 
 # VSCode로 해당 디렉토리 열기
 npm install
