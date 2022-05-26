@@ -67,7 +67,7 @@ npm install
 npm run dev
 ```
 * ❕ `import App from './App.svelte';` `Windows`에서 오류 난다면
-* ❕ `settings.json`(VSCode 설정 파일: Ctrl + p) <- `"svelte.enable-ts-plugin": true` 추가
+* ❕ `settings.json`(VSCode 설정 파일: Ctrl + p) <- `"svelte.enable-ts-plugin": true` 추가 후 재시작
 * `npm run build` 설명
 
 ## GIT
