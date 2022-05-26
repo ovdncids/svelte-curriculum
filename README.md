@@ -61,12 +61,13 @@ code .
 # Typescript로 변경
 node scripts/setupTypeScript.js
 ## src/main.ts
-## import App from './App.svelte'; (Windows에서 오류 난다면 일단 무시 하자)
 
 # VSCode로 해당 디렉토리 열기
 npm install
 npm run dev
 ```
+* ❕ `import App from './App.svelte';` `Windows`에서 오류 난다면
+* ❕ `settings.json`(VSCode 설정 파일: Ctrl + p) <- `"svelte.enable-ts-plugin": true` 추가
 * `npm run build` 설명
 
 ## GIT
