@@ -66,8 +66,15 @@ node scripts/setupTypeScript.js
 npm install
 npm run dev
 ```
-* ❕ `import App from './App.svelte';` `Windows`에서 오류 난다면
-* ❕ `settings.json`(VSCode 설정 파일: Ctrl + p) <- `"svelte.enable-ts-plugin": true` 추가 후 재시작
+* ❕ `import App from './App.svelte';` 오류 난다면 `Ctrl + Shift + p` > `기본 설정 열기` 아래 추가 후 `재시작`
+```sh
+# settings.json
+{
+  "svelte.language-server.ls-path": "/Users/{사용자}/.nvm/versions/node/v14.15.1/bin/node",
+  "svelte.enable-ts-plugin": true
+}
+# which node: node 경로를 찾는다.
+```
 * `npm run build` 설명
 
 ## GIT
