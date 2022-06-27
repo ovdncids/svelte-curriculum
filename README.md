@@ -306,6 +306,7 @@ import active from 'svelte-spa-router/active'
     <li><h2><a href="/" use:link use:active>Home</a></h2></li>
     <li><h2><a href="/members" use:link use:active>Members</a></h2></li>
     <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
+    <!-- <li href="/search" use:active><h2><a href="/search" use:link use:active>Search</a></h2></li> li에 active를 넣어야 하는 경우 -->
   </ul>
 </nav>
 ```
