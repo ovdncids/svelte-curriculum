@@ -73,7 +73,10 @@ npm run dev
   "svelte.language-server.ls-path": "/Users/{사용자}/.nvm/versions/node/v14.15.1/bin/node",
   "svelte.enable-ts-plugin": true
 }
-# which node: node 경로를 찾는다.
+```
+```sh
+# node 경로를 찾는다.
+which node
 ```
 * `npm run build` 설명
 
