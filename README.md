@@ -710,7 +710,7 @@ const searchRead = (event) => {
 </form>
 ```
 
-## Search Compenent 쿼리스트링 변경과 새로고침 적용
+## Search Component 쿼리스트링 변경과 새로고침 적용
 src/components/contents/Search.svelte
 ```diff
 + import {push, querystring} from 'svelte-spa-router';
