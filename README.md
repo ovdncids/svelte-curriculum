@@ -1,5 +1,5 @@
 # Svelte
-* [데모](https://ovdncids.github.io/svelte-curriculum/demo)
+* [데모](https://ovdncids-curriculums.web.app)
 
 ## Node.js
 https://nodejs.org
@@ -271,12 +271,21 @@ export default routes;
 
 src/components/contents/Home.svelte
 ```html
+<script>
+import {replace} from 'svelte-spa-router';
+
+replace('/members');
+</script>
+```
+* `replace`는 주소 창에서 `/#/home` history가 남지 않는다.
+
+src/components/contents/Members.svelte
+```html
 <div>
-  <h3>Home</h3>
+  <h3>Members</h3>
   <p>Contents</p>
 </div>
 ```
-src/components/contents/Members.svelte (동일)
 
 src/components/contents/Search.svelte (동일)
 
@@ -306,7 +315,6 @@ import active from 'svelte-spa-router/active'
 
 <nav class="nav">
   <ul>
-    <li><h2><a href="/" use:link use:active>Home</a></h2></li>
     <li><h2><a href="/members" use:link use:active>Members</a></h2></li>
     <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
     <!-- <li href="/search" use:active><h2><a href="/search" use:link use:active>Search</a></h2></li> li에 active를 넣어야 하는 경우 -->
@@ -627,13 +635,13 @@ axios.patch('http://localhost:3100/api/v1/members/' + index, member).then((respo
 ## Search Store 만들기
 src/stores/searchStore.js
 ```js
+import membersStore from './membersStore.js';
 import axios from 'axios';
 import { axiosError } from './common.js';
-import membersStore from './membersStore.js';
 
 class SearchStore {
   searchRead(q) {
-    const url = `http://localhost:3100/api/v1/search?q=${q}`;
+    const url = 'http://localhost:3100/api/v1/search?q=' + q;
     axios.get(url).then((response) => {
       console.log('Done searchRead', response);
       membersStore.members.set(response.data.members);
@@ -710,19 +718,33 @@ const searchRead = (event) => {
 </form>
 ```
 
-## Search Component 쿼리스트링 변경과 새로고침 적용
+## Search Component 쿼리스트링 변경
 src/components/contents/Search.svelte
 ```diff
++ import {push} from 'svelte-spa-router';
+```
+
+```diff
+- searchStore.searchRead(q);
++ push('/search?q=' + q);
+```
+
+src/components/Nav.svelte
+```diff
+- <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
++ <li><h2><a href="/search" use:link use:active={/search*/}>Search</a></h2></li>
+```
+* `active` 조건은 `정규식`이 가능하다.
+* `검색`, `뒤로가기` 해보기
+
+## Search Component 새로고침 적용
+```diff
+- import {push} from 'svelte-spa-router';
 + import {push, querystring} from 'svelte-spa-router';
 ```
 ```diff
 - searchStore.searchRead('');
 ```
-```diff
-- searchStore.searchRead(q);
-+ push(`/search?q=${q}`);
-```
-* `검색`, `뒤로가기` 해보기
 
 ```js
 const watchQuerystring = (querystring) => {
@@ -731,14 +753,6 @@ const watchQuerystring = (querystring) => {
 }
 $: watchQuerystring($querystring);
 ```
-
-### Navigator active 수정
-src/components/Nav.svelte
-```diff
-- <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
-+ <li><h2><a href="/search" use:link use:active={/search*/}>Search</a></h2></li>
-```
-* `active` 조건은 `정규식`이 가능하다.
 
 ## Proxy 설정
 * https://github.com/sveltejs/svelte/issues/3717
