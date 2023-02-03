@@ -1,5 +1,5 @@
 # Svelte
-* [데모](https://ovdncids-curriculums.web.app)
+* [데모](https://curriculums-odc.web.app)
 
 ## Node.js
 * https://nodejs.org
