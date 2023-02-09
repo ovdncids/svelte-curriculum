@@ -307,7 +307,7 @@ class UsersStore {
 export default new UsersStore();
 ```
 
-### Users Component Store inject
+### Users Component Store 주입
 src/components/contents/Users.svelte
 ```svelte
 <script>
@@ -613,6 +613,7 @@ class SearchStore {
 export default new SearchStore();
 ```
 
+### Search Component Store 주입
 src/components/contents/Search.svelte
 ```svelte
 <script>
