@@ -64,14 +64,14 @@ src/App.svelte (덮어 씌우기)
   <div class="container">
     <nav class="nav">
       <ul>
-        <li><h2>Members</h2></li>
+        <li><h2>Users</h2></li>
         <li><h2>Search</h2></li>
       </ul>
     </nav>
     <hr />
     <section class="contents">
       <div>
-        <h3>Members</h3>
+        <h3>Users</h3>
         <p>Contents</p>
       </div>
     </section>
@@ -172,7 +172,7 @@ src/App.svelte
 
 - <nav class="nav">
 -   <ul>
--     <li><h2>Members</h2></li>
+-     <li><h2>Users</h2></li>
 -     <li><h2>Search</h2></li>
 -   </ul>
 - </nav>
@@ -216,12 +216,12 @@ npm install svelte-spa-router
 src/routes.js
 ```js
 import Home from './components/contents/Home.svelte';
-import Members from './components/contents/Members.svelte';
+import Users from './components/contents/Users.svelte';
 import Search from './components/contents/Search.svelte';
 
 const routes = {
   '/': Home,
-  '/members': Members,
+  '/users': Users,
   '/search': Search
 };
 
@@ -233,15 +233,15 @@ src/components/contents/Home.svelte
 <script>
 import {replace} from 'svelte-spa-router';
 
-replace('/members');
+replace('/users');
 </script>
 ```
 * `replace`는 주소 창에서 `/#/home` history가 남지 않는다.
 
-src/components/contents/Members.svelte
+src/components/contents/Users.svelte
 ```html
 <div>
-  <h3>Members</h3>
+  <h3>Users</h3>
   <p>Contents</p>
 </div>
 ```
@@ -256,14 +256,14 @@ import routes from './routes';
 ```diff
   <section class="contents">
 -   <div>
--     <h3>Members</h3>
+-     <h3>Users</h3>
 -     <p>Contents</p>
 -   </div>
 +   <Router {routes} />
 ```
 
 **주소 창에서 router 바꾸어 보기**
-* http://localhost:8080/#/members
+* http://localhost:8080/#/users
 
 src/components/Nav.svelte (덮어 씌우기)
 ```svelte
@@ -274,7 +274,7 @@ import active from 'svelte-spa-router/active'
 
 <nav class="nav">
   <ul>
-    <li><h2><a href="/members" use:link use:active>Members</a></h2></li>
+    <li><h2><a href="/users" use:link use:active>Users</a></h2></li>
     <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
     <!-- <li href="/search" use:active><h2><a href="/search" use:link use:active>Search</a></h2></li> li에 active를 넣어야 하는 경우 -->
   </ul>
@@ -283,7 +283,7 @@ import active from 'svelte-spa-router/active'
 
 **여기 까지가 Markup 개발자 분들이 할일 입니다.**
 
-## Members Store 만들기
+## Users Store 만들기
 **Store 개념 설명**
 
 Component가 사용하는 글로벌 함수 또는 변수라고 생각하면 쉽다, state 값이 변하면 해당 값을 바라 보는 모든 Component가 수정 된다.
@@ -292,33 +292,33 @@ Component가 사용하는 글로벌 함수 또는 변수라고 생각하면 쉽�
 
 Component에 변경된 사항을 다시 그리기 위해서 Store를 사용 한다.
 
-src/stores/membersStore.js
+src/stores/usersStore.js
 ```js
 import { writable } from 'svelte/store';
 
-class MembersStore {
-  members = writable([]);
-  member = writable({
+class UsersStore {
+  users = writable([]);
+  user = writable({
     name: '',
     age: ''
   });
 }
 
-export default new MembersStore();
+export default new UsersStore();
 ```
 
-### Members Component Store inject
-src/components/contents/Members.svelte
+### Users Component Store inject
+src/components/contents/Users.svelte
 ```svelte
 <script>
-import membersStore from '../../stores/membersStore.js';
+import usersStore from '../../stores/usersStore.js';
 
-const {members, member} = membersStore;
-console.log($members, $member);
+const {users, user} = usersStore;
+console.log($users, $user);
 </script>
 
 <div>
-  <h3>Members</h3>
+  <h3>Users</h3>
   <hr class="d-block" />
   <div>
     <h4>Read</h4>
@@ -352,55 +352,55 @@ console.log($members, $member);
 </div>
 ```
 
-## Members Store CRUD
+## Users Store CRUD
 ### Cread
-src/stores/membersStore.js
+src/stores/usersStore.js
 ```js
-membersCreate(member) {
-  this.members.update(members => {
-    members.push({
-      name: member.name,
-      age: member.age
+usersCreate(user) {
+  this.users.update(users => {
+    users.push({
+      name: user.name,
+      age: user.age
     });
-    console.log('Done membersCreate', members);
-    return members;
+    console.log('Done usersCreate', users);
+    return users;
   });
 };
 ```
 
-src/components/contents/Members.svelte
+src/components/contents/Users.svelte
 ```svelte
-<input type="text" placeholder="Name" bind:value={$member.name} />
-<input type="text" placeholder="Age" bind:value={$member.age} />
-<button on:click="{() => membersStore.membersCreate($member)}">Create</button>
+<input type="text" placeholder="Name" bind:value={$user.name} />
+<input type="text" placeholder="Age" bind:value={$user.age} />
+<button on:click="{() => usersStore.usersCreate($user)}">Create</button>
 ```
 
 * `Footer.svelte` Store 적용 해보기
 ```svelte
-<footer>Copyright {$member.name}</footer>
+<footer>Copyright {$user.name}</footer>
 ```
 
 ### Read
-src/stores/membersStore.js
+src/stores/usersStore.js
 ```js
-membersRead() {
-  this.members.update(() => {
-    const members = [{
+usersRead() {
+  this.users.update(() => {
+    const users = [{
       name: '홍길동',
       age: 20
     }, {
       name: '춘향이',
       age: 16
     }];
-    console.log('Done membersRead', members);
-    return members;
+    console.log('Done usersRead', users);
+    return users;
   });
 };
 ```
 
-src/components/contents/Members.svelte
+src/components/contents/Users.svelte
 ```js
-membersStore.membersRead();
+usersStore.usersRead();
 ```
 ```diff
 - <tr>
@@ -413,10 +413,10 @@ membersStore.membersRead();
 - </tr>
 ```
 ```svelte
-{#each $members as member, index}
+{#each $users as user, index}
   <tr>
-    <td>{member.name}</td>
-    <td>{member.age}</td>
+    <td>{user.name}</td>
+    <td>{user.age}</td>
     <td>
       <button>Update</button>
       <button>Delete</button>
@@ -426,49 +426,49 @@ membersStore.membersRead();
 ```
 
 ### Delete
-src/stores/membersStore.js
+src/stores/usersStore.js
 ```js
-membersDelete(index) {
-  this.members.update(members => {
-    members.splice(index, 1);
-    console.log('Done membersDelete', members);
-    return members;
+usersDelete(index) {
+  this.users.update(users => {
+    users.splice(index, 1);
+    console.log('Done usersDelete', users);
+    return users;
   });
 };
 ```
 
-src/components/contents/Members.svelte
+src/components/contents/Users.svelte
 ```diff
 - <button>Delete</button>
-+ <button on:click="{() => membersStore.membersDelete(index)}">Delete</button>
++ <button on:click="{() => usersStore.usersDelete(index)}">Delete</button>
 ```
 
 ### Update
-src/stores/membersStore.js
+src/stores/usersStore.js
 ```js
-membersUpdate(index, member) {
-  this.members.update(members => {
-    members[index] = member;
-    console.log('Done membersUpdate', members);
-    return members;
+usersUpdate(index, user) {
+  this.users.update(users => {
+    users[index] = user;
+    console.log('Done usersUpdate', users);
+    return users;
   });
 };
 ```
 
-src/components/contents/Members.svelte
+src/components/contents/Users.svelte
 ```diff
-- <td>{{member.name}}</td>
-- <td>{{member.age}}</td>
+- <td>{{user.name}}</td>
+- <td>{{user.age}}</td>
 ```
 ```svelte
-<td><input type="text" placeholder="Name" bind:value={member.name} /></td>
-<td><input type="text" placeholder="Age" bind:value={member.age} /></td>
+<td><input type="text" placeholder="Name" bind:value={user.name} /></td>
+<td><input type="text" placeholder="Age" bind:value={user.age} /></td>
 ```
 ```diff
 - <button>Update</button>
 ```
 ```svelte
-<button on:click="{() => membersStore.membersUpdate(index, member)}">Update</button>
+<button on:click="{() => usersStore.usersUpdate(index, user)}">Update</button>
 ```
 
 ## Backend Server
@@ -496,96 +496,96 @@ export const axiosError = (error) => {
 ```
 
 ### Create
-src/stores/MembersStore.js
+src/stores/UsersStore.js
 ```js
 import axios from 'axios';
 import { axiosError } from './common.js';
 ```
 ### Create
-src/stores/MembersStore.js
+src/stores/UsersStore.js
 ```js
 import axios from 'axios';
 import { axiosError } from './common.js';
 ```
 ```diff
-membersCreate(member) {
-- this.members.update(members => {
--   members.push(member);
--   console.log('Done membersCreate', members);
--   return members;
+usersCreate(user) {
+- this.users.update(users => {
+-   users.push(user);
+-   console.log('Done usersCreate', users);
+-   return users;
 - });
 };
 ```
 ```js
-axios.post('http://localhost:3100/api/v1/members', member).then((response) => {
-  console.log('Done membersCreate', response);
-  this.membersRead();
+axios.post('http://localhost:3100/api/v1/users', user).then((response) => {
+  console.log('Done usersCreate', response);
+  this.usersRead();
 }).catch((error) => {
   axiosError(error);
 });
 ```
 
 ### Read
-src/stores/MembersStore.js
+src/stores/UsersStore.js
 ```diff
-membersRead() {
-- this.members.update(() => {
--   const members = [{
+usersRead() {
+- this.users.update(() => {
+-   const users = [{
 -     name: '홍길동',
 -     age: 20
 -   }, {
 -     name: '춘향이',
 -     age: 16
 -   }];
--   console.log('Done membersRead', members);
--   return members;
+-   console.log('Done usersRead', users);
+-   return users;
 - });
 };
 ```
 ```js
-axios.get('http://localhost:3100/api/v1/members').then((response) => {
-  console.log('Done membersRead', response);
-  this.members.set(response.data.members);
+axios.get('http://localhost:3100/api/v1/users').then((response) => {
+  console.log('Done usersRead', response);
+  this.users.set(response.data.users);
 }).catch((error) => {
   axiosError(error);
 });
 ```
 
 ### Delete
-src/stores/MembersStore.js
+src/stores/UsersStore.js
 ```diff
-membersDelete(index) {
-- this.members.update(members => {
--   members.splice(index, 1);
--   console.log('Done membersDelete', members);
--   return members;
+usersDelete(index) {
+- this.users.update(users => {
+-   users.splice(index, 1);
+-   console.log('Done usersDelete', users);
+-   return users;
 - });
 };
 ```
 ```js
-axios.delete('http://localhost:3100/api/v1/members/' + index).then((response) => {
-  console.log('Done membersDelete', response);
-  this.membersRead();
+axios.delete('http://localhost:3100/api/v1/users/' + index).then((response) => {
+  console.log('Done usersDelete', response);
+  this.usersRead();
 }).catch((error) => {
   axiosError(error);
 });
 ```
 
 ### Update
-src/stores/MembersStore.js
+src/stores/UsersStore.js
 ```diff
-membersUpdate(index, member) {
-- this.members.update(members => {
--   members[index] = member;
--   console.log('Done membersUpdate', members);
--   return members;
+usersUpdate(index, user) {
+- this.users.update(users => {
+-   users[index] = user;
+-   console.log('Done usersUpdate', users);
+-   return users;
 - });
 };
 ```
 ```js
-axios.patch('http://localhost:3100/api/v1/members/' + index, member).then((response) => {
-  console.log('Done membersUpdate', response);
-  this.membersRead();
+axios.patch('http://localhost:3100/api/v1/users/' + index, user).then((response) => {
+  console.log('Done usersUpdate', response);
+  this.usersRead();
 }).catch((error) => {
   axiosError(error);
 });
@@ -594,7 +594,7 @@ axios.patch('http://localhost:3100/api/v1/members/' + index, member).then((respo
 ## Search Store 만들기
 src/stores/searchStore.js
 ```js
-import membersStore from './membersStore.js';
+import usersStore from './usersStore.js';
 import axios from 'axios';
 import { axiosError } from './common.js';
 
@@ -603,7 +603,7 @@ class SearchStore {
     const url = 'http://localhost:3100/api/v1/search?q=' + q;
     axios.get(url).then((response) => {
       console.log('Done searchRead', response);
-      membersStore.members.set(response.data.members);
+      usersStore.users.set(response.data.users);
     }).catch((error) => {
       axiosError(error);
     });
@@ -616,12 +616,12 @@ export default new SearchStore();
 src/components/contents/Search.svelte
 ```svelte
 <script>
-import membersStore from '../../stores/membersStore.js';
+import usersStore from '../../stores/usersStore.js';
 import searchStore from '../../stores/searchStore.js';
 
-const {members} = membersStore;
+const {users} = usersStore;
 searchStore.searchRead('');
-console.log($members);
+console.log($users);
 </script>
 
 <div>
@@ -643,10 +643,10 @@ console.log($members);
         </tr>
       </thead>
       <tbody>
-      {#each $members as member, index}
+      {#each $users as user, index}
         <tr>
-          <td>{member.name}</td>
-          <td>{member.age}</td>
+          <td>{user.name}</td>
+          <td>{user.age}</td>
         </tr>
       {/each}
       </tbody>
