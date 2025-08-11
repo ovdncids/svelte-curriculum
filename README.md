@@ -167,9 +167,7 @@ Header.svelte, Nav.svelte, Footer.svelte 이렇게 Component 별로 파일을 �
 
 src/routes/+layout.svelte
 ```svelte
-<script>
 import Header from './Header.svelte';
-</script>
 ```
 
 src/routes/Header.svelte
