@@ -1,4 +1,4 @@
-# Svelte
+# Svelte (5.38.0)
 * [데모](https://curriculums-min.web.app)
 
 ## Node.js
@@ -7,37 +7,52 @@
 ## NVM (Node Version Manager)
 * https://github.com/ovdncids/react-curriculum/blob/master/NVM.md
 
+## SvelteKit vs Svelte
+* [Svelte](https://svelte.dev/docs/svelte/overview)는 React, Vue.js의 기본 문법과 같이 `UI 컴포넌트를 렌더링하는 프레임워크`에 필요한 기본 문법을 뜻함.
+* [SvelteKit](https://svelte.dev/docs/kit/introduction)은 로컬 서버, 테스트, 빌드, 개발 환경등을 설정 가능한 `웹 애플리케이션`을 만들 수 있도록 도와주는 도구를 뜻함.
+
 ## Svelte CLI
-* https://svelte.dev/docs
-* https://v2.svelte.dev/guide
-* https://beomy.github.io/tech/svelte/start-svelte
+* https://svelte.dev/docs/kit/creating-a-project
 ```sh
 # Svelte 프로젝트 생성
-npx degit sveltejs/template svelte-study
+npx sv create svelte-study
+# Which template would you like? SvelteKit minimal
+# Add type checking with TypeScript? Yes, using TypeScript syntax
+# What would you like to add to your project? (추후에 추가 가능. npx sv add tailwindcss)
+
 cd svelte-study
 code .
-
-# Typescript로 변경
-node scripts/setupTypeScript.js
-## src/main.ts
-
-# VSCode로 해당 디렉토리 열기
-npm install
 npm run dev
+# or
+npm run dev -- --open 
 ```
-* ❕ `import App from './App.svelte';` 오류 난다면 `Ctrl + Shift + p` > `기본 설정 열기` 아래 추가 후 `재시작`
+* `npm run build`, `npm run preview` 설명
+* `npm ls`, `npm outdated(설치된 패키지 보다 새로운 버전의 패키지들이 있는지 확인)` 설명
+
+<!--
+### Static site generation
+* https://svelte.dev/docs/kit/adapter-static
 ```sh
-# settings.json
-{
-  "svelte.language-server.ls-path": "/Users/{사용자}/.nvm/versions/node/v14.15.1/bin/node",
-  "svelte.enable-ts-plugin": true
-}
+npm i -D @sveltejs/adapter-static
 ```
-```sh
-# node 경로를 찾는다.
-which node
+svelte.config.js
+```js
+import adapter from '@sveltejs/adapter-static';
+
+export default {
+	kit: {
+		adapter: adapter({
+			pages: 'build',
+			assets: 'build',
+			fallback: undefined,
+			precompress: false,
+			strict: true,
+			fallback: 'index.html'
+		})
+	}
+};
 ```
-* `npm run build` 설명
+-->
 
 ## GIT
 소스 관리를 위해 사용한다. 어느 파일이 언제 어떻게 변경되었는지 쉽게 볼 수 있다.
@@ -51,11 +66,14 @@ git init
 ```
 
 ## Markup
-src/App.svelte (덮어 씌우기)
+src/routes/+layout.svelte
 ```svelte
-<script>
-</script>
-
+<link rel="stylesheet" href="/css/global.css" />
+```
+```diff
+- {@render children?.()}
+```
+```svelte
 <div id="app">
   <header>
     <h1>Svelte study</h1>
@@ -81,7 +99,7 @@ src/App.svelte (덮어 씌우기)
 </div>
 ```
 
-public/global.css (덮어 씌우기)
+static/css/global.css
 ```css
 * {
   margin: 0;
