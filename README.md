@@ -269,26 +269,31 @@ Component가 사용하는 글로벌 함수 또는 변수라고 생각하면 쉽�
 
 Component에 변경된 사항을 다시 그리기 위해서 Store를 사용 한다.
 
-src/stores/usersStore.js
+src/lib/stores/usersStore.ts
 ```js
 import { writable } from 'svelte/store';
 
+interface User {
+  name: string;
+  age: string;
+}
+
 class UsersStore {
-  users = writable([]);
+  users = writable([] as User[]);
   user = writable({
     name: '',
     age: ''
-  });
+  } as User);
 }
 
 export default new UsersStore();
 ```
 
 ### Users Component Store 주입
-src/components/contents/Users.svelte
+src/routes/users/+page.svelte (덮어 씌우기)
 ```svelte
 <script>
-import usersStore from '../../stores/usersStore.js';
+import usersStore from '$lib/stores/UsersStore.ts';
 
 const {users, user} = usersStore;
 console.log($users, $user);
@@ -331,9 +336,9 @@ console.log($users, $user);
 
 ## Users Store CRUD
 ### Cread
-src/stores/usersStore.js
+src/lib/stores/UsersStore.ts
 ```js
-usersCreate(user) {
+usersCreate(user: User) {
   this.users.update(users => {
     users.push({
       name: user.name,
@@ -345,7 +350,7 @@ usersCreate(user) {
 };
 ```
 
-src/components/contents/Users.svelte
+src/routes/users/+page.svelte
 ```svelte
 <input type="text" placeholder="Name" bind:value={$user.name} />
 <input type="text" placeholder="Age" bind:value={$user.age} />
@@ -358,16 +363,16 @@ src/components/contents/Users.svelte
 ```
 
 ### Read
-src/stores/usersStore.js
+src/lib/stores/UsersStore.ts
 ```js
 usersRead() {
   this.users.update(() => {
     const users = [{
       name: '홍길동',
-      age: 20
+      age: '20'
     }, {
       name: '춘향이',
-      age: 16
+      age: '16'
     }];
     console.log('Done usersRead', users);
     return users;
@@ -375,7 +380,7 @@ usersRead() {
 };
 ```
 
-src/components/contents/Users.svelte
+src/routes/users/+page.svelte
 ```js
 usersStore.usersRead();
 ```
@@ -403,9 +408,9 @@ usersStore.usersRead();
 ```
 
 ### Delete
-src/stores/usersStore.js
+src/lib/stores/UsersStore.ts
 ```js
-usersDelete(index) {
+usersDelete(index: number) {
   this.users.update(users => {
     users.splice(index, 1);
     console.log('Done usersDelete', users);
@@ -414,16 +419,16 @@ usersDelete(index) {
 };
 ```
 
-src/components/contents/Users.svelte
+src/routes/users/+page.svelte
 ```diff
 - <button>Delete</button>
 + <button on:click="{() => usersStore.usersDelete(index)}">Delete</button>
 ```
 
 ### Update
-src/stores/usersStore.js
+src/lib/stores/UsersStore.ts
 ```js
-usersUpdate(index, user) {
+usersUpdate(index: number, user: User) {
   this.users.update(users => {
     users[index] = user;
     console.log('Done usersUpdate', users);
@@ -432,7 +437,7 @@ usersUpdate(index, user) {
 };
 ```
 
-src/components/contents/Users.svelte
+src/routes/users/+page.svelte
 ```diff
 - <td>{{user.name}}</td>
 - <td>{{user.age}}</td>
@@ -465,7 +470,7 @@ npm install axios
 ```
 
 ### Axios common 에러 처리
-src/stores/common.js
+src/lib/stores/common.js
 ```js
 export const axiosError = (error) => {
   console.error(error.response || error.message || error);
@@ -473,13 +478,13 @@ export const axiosError = (error) => {
 ```
 
 ### Create
-src/stores/UsersStore.js
+src/lib/stores/UsersStore.ts
 ```js
 import axios from 'axios';
 import { axiosError } from './common.js';
 ```
 ### Create
-src/stores/UsersStore.js
+src/lib/stores/UsersStore.ts
 ```js
 import axios from 'axios';
 import { axiosError } from './common.js';
@@ -503,7 +508,7 @@ axios.post('http://localhost:3100/api/v1/users', user).then((response) => {
 ```
 
 ### Read
-src/stores/UsersStore.js
+src/lib/stores/UsersStore.ts
 ```diff
 usersRead() {
 - this.users.update(() => {
@@ -529,7 +534,7 @@ axios.get('http://localhost:3100/api/v1/users').then((response) => {
 ```
 
 ### Delete
-src/stores/UsersStore.js
+src/lib/stores/UsersStore.ts
 ```diff
 usersDelete(index) {
 - this.users.update(users => {
@@ -549,7 +554,7 @@ axios.delete('http://localhost:3100/api/v1/users/' + index).then((response) => {
 ```
 
 ### Update
-src/stores/UsersStore.js
+src/lib/stores/UsersStore.ts
 ```diff
 usersUpdate(index, user) {
 - this.users.update(users => {
@@ -569,9 +574,9 @@ axios.patch('http://localhost:3100/api/v1/users/' + index, user).then((response)
 ```
 
 ## Search Store 만들기
-src/stores/searchStore.js
+src/lib/stores/searchStore.ts
 ```js
-import usersStore from './usersStore.js';
+import usersStore from './UsersStore.ts';
 import axios from 'axios';
 import { axiosError } from './common.js';
 
@@ -591,11 +596,11 @@ export default new SearchStore();
 ```
 
 ### Search Component Store 주입
-src/components/contents/Search.svelte
+src/routes/search/+page.svelte
 ```svelte
 <script>
-import usersStore from '../../stores/usersStore.js';
-import searchStore from '../../stores/searchStore.js';
+import usersStore from '$lib/stores/UsersStore';
+import searchStore from '$lib/stores/searchStore';
 
 const {users} = usersStore;
 searchStore.searchRead('');
@@ -634,7 +639,7 @@ console.log($users);
 ```
 
 ## Search Component에서만 사용 가능한 state값 적용
-src/components/contents/Search.svelte
+src/routes/search/+page.svelte
 ```js
 let q = '';
 const searchRead = (event) => {
@@ -656,7 +661,7 @@ const searchRead = (event) => {
 ```
 
 ## Search Component 쿼리스트링 변경
-src/components/contents/Search.svelte
+src/routes/search/+page.svelte
 ```diff
 + import {push} from 'svelte-spa-router';
 ```
