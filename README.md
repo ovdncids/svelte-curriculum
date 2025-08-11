@@ -247,6 +247,7 @@ src/routes/Nav.svelte (덮어 씌우기)
 ```svelte
 <script lang="ts">
   import { getStores } from '$app/stores';
+
   const { page } = getStores();
 </script>
 
@@ -270,7 +271,7 @@ Component가 사용하는 글로벌 함수 또는 변수라고 생각하면 쉽�
 Component에 변경된 사항을 다시 그리기 위해서 Store를 사용 한다.
 
 src/lib/stores/usersStore.ts
-```js
+```ts
 import { writable } from 'svelte/store';
 
 interface User {
@@ -292,11 +293,11 @@ export default new UsersStore();
 ### Users Component Store 주입
 src/routes/users/+page.svelte (덮어 씌우기)
 ```svelte
-<script>
-import usersStore from '$lib/stores/UsersStore.ts';
+<script lang="ts">
+  import usersStore from '$lib/stores/UsersStore';
 
-const {users, user} = usersStore;
-console.log($users, $user);
+  const {users, user} = usersStore;
+  console.log($users, $user);
 </script>
 
 <div>
@@ -337,7 +338,7 @@ console.log($users, $user);
 ## Users Store CRUD
 ### Cread
 src/lib/stores/UsersStore.ts
-```js
+```ts
 usersCreate(user: User) {
   this.users.update(users => {
     users.push({
@@ -364,7 +365,7 @@ src/routes/users/+page.svelte
 
 ### Read
 src/lib/stores/UsersStore.ts
-```js
+```ts
 usersRead() {
   this.users.update(() => {
     const users = [{
@@ -381,7 +382,7 @@ usersRead() {
 ```
 
 src/routes/users/+page.svelte
-```js
+```ts
 usersStore.usersRead();
 ```
 ```diff
@@ -409,7 +410,7 @@ usersStore.usersRead();
 
 ### Delete
 src/lib/stores/UsersStore.ts
-```js
+```ts
 usersDelete(index: number) {
   this.users.update(users => {
     users.splice(index, 1);
@@ -427,7 +428,7 @@ src/routes/users/+page.svelte
 
 ### Update
 src/lib/stores/UsersStore.ts
-```js
+```ts
 usersUpdate(index: number, user: User) {
   this.users.update(users => {
     users[index] = user;
@@ -470,24 +471,18 @@ npm install axios
 ```
 
 ### Axios common 에러 처리
-src/lib/stores/common.js
-```js
-export const axiosError = (error) => {
+src/lib/stores/common.ts
+```ts
+export const axiosError = (error: any) => {
   console.error(error.response || error.message || error);
 };
 ```
 
 ### Create
 src/lib/stores/UsersStore.ts
-```js
+```ts
 import axios from 'axios';
-import { axiosError } from './common.js';
-```
-### Create
-src/lib/stores/UsersStore.ts
-```js
-import axios from 'axios';
-import { axiosError } from './common.js';
+import { axiosError } from './common';
 ```
 ```diff
 usersCreate(user) {
@@ -498,7 +493,7 @@ usersCreate(user) {
 - });
 };
 ```
-```js
+```ts
 axios.post('http://localhost:3100/api/v1/users', user).then((response) => {
   console.log('Done usersCreate', response);
   this.usersRead();
@@ -524,7 +519,7 @@ usersRead() {
 - });
 };
 ```
-```js
+```ts
 axios.get('http://localhost:3100/api/v1/users').then((response) => {
   console.log('Done usersRead', response);
   this.users.set(response.data.users);
@@ -544,7 +539,7 @@ usersDelete(index) {
 - });
 };
 ```
-```js
+```ts
 axios.delete('http://localhost:3100/api/v1/users/' + index).then((response) => {
   console.log('Done usersDelete', response);
   this.usersRead();
@@ -564,7 +559,7 @@ usersUpdate(index, user) {
 - });
 };
 ```
-```js
+```ts
 axios.patch('http://localhost:3100/api/v1/users/' + index, user).then((response) => {
   console.log('Done usersUpdate', response);
   this.usersRead();
@@ -575,13 +570,13 @@ axios.patch('http://localhost:3100/api/v1/users/' + index, user).then((response)
 
 ## Search Store 만들기
 src/lib/stores/searchStore.ts
-```js
-import usersStore from './UsersStore.ts';
+```ts
+import usersStore from './usersStore';
 import axios from 'axios';
-import { axiosError } from './common.js';
+import { axiosError } from './common';
 
 class SearchStore {
-  searchRead(q) {
+  searchRead(q: string) {
     const url = 'http://localhost:3100/api/v1/search?q=' + q;
     axios.get(url).then((response) => {
       console.log('Done searchRead', response);
@@ -596,15 +591,15 @@ export default new SearchStore();
 ```
 
 ### Search Component Store 주입
-src/routes/search/+page.svelte
+src/routes/search/+page.svelte (덮어 씌우기)
 ```svelte
-<script>
-import usersStore from '$lib/stores/UsersStore';
-import searchStore from '$lib/stores/searchStore';
+<script lang="ts">
+  import usersStore from '$lib/stores/usersStore';
+  import searchStore from '$lib/stores/searchStore';
 
-const {users} = usersStore;
-searchStore.searchRead('');
-console.log($users);
+  const {users} = usersStore;
+  searchStore.searchRead('');
+  console.log($users);
 </script>
 
 <div>
@@ -640,9 +635,9 @@ console.log($users);
 
 ## Search Component에서만 사용 가능한 state값 적용
 src/routes/search/+page.svelte
-```js
+```ts
 let q = '';
-const searchRead = (event) => {
+const searchRead = (event: Event) => {
   event.preventDefault();
   searchStore.searchRead(q);
 };
@@ -663,37 +658,30 @@ const searchRead = (event) => {
 ## Search Component 쿼리스트링 변경
 src/routes/search/+page.svelte
 ```diff
-+ import {push} from 'svelte-spa-router';
++ import { goto } from '$app/navigation';
 ```
 
 ```diff
 - searchStore.searchRead(q);
-+ push('/search?q=' + q);
++ goto('/search?q=' + q);
 ```
-
-src/components/Nav.svelte
-```diff
-- <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
-+ <li><h2><a href="/search" use:link use:active={/search*/}>Search</a></h2></li>
-```
-* `active` 조건은 `정규식`이 가능하다.
 * `검색`, `뒤로가기` 해보기
 
 ## Search Component 새로고침 적용
-```diff
-- import {push} from 'svelte-spa-router';
-+ import {push, querystring} from 'svelte-spa-router';
+```ts
+import { getStores } from '$app/stores';
 ```
 ```diff
 - searchStore.searchRead('');
 ```
 
-```js
-const watchQuerystring = (querystring) => {
+```ts
+const watchQuerystring = (querystring: string) => {
   q = new URLSearchParams(querystring).get('q') || '';
   searchStore.searchRead(q);
 }
-$: watchQuerystring($querystring);
+const { page } = getStores();
+$: watchQuerystring($page.url.searchParams.toString());
 ```
 
 ## Proxy 설정
