@@ -166,7 +166,7 @@ input[type=text] {
 Header.svelte, Nav.svelte, Footer.svelte 이렇게 Component 별로 파일을 나눈다.
 
 src/routes/+layout.svelte
-```svelte
+```ts
 import Header from './Header.svelte';
 ```
 
@@ -239,7 +239,7 @@ src/routes/+layout.svelte
 ```
 
 **주소 창에서 router 바꾸어 보기**
-* http://localhost:8080/search
+* http://localhost:5173/search
 
 src/routes/Nav.svelte (덮어 씌우기)
 ```svelte
