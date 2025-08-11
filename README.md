@@ -685,27 +685,18 @@ $: watchQuerystring($page.url.searchParams.toString());
 ```
 
 ## Proxy 설정
-* https://github.com/sveltejs/svelte/issues/3717
-
-```sh
-npm install rollup-plugin-dev --save-dev
-```
-
-rollup.config.js
-```js
-import dev from 'rollup-plugin-dev';
-
-  plugins: [
-    !production && dev({
-      dirs: ['public'],
-      host: 'localhost',
-      port: 8080,
-      proxy: [{
-        from: '/api',
-        to: 'http://localhost:3100/api'
-      }]
-    })
-  ]
+vite.config.ts
+```ts
+export default defineConfig({
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3100',
+        changeOrigin: true
+      }
+    }
+  }
+});
 ```
 
 모든 파일 수정
@@ -713,48 +704,5 @@ import dev from 'rollup-plugin-dev';
 - http://localhost:3100/api
 + /api
 ```
-
-## SCSS 설정
-* https://github.com/sveltejs/svelte-preprocess/blob/main/docs/getting-started.md
-* https://jforj.tistory.com/179
-* https://jforj.tistory.com/184
-
-```sh
-npm install -D svelte-preprocess node-sass postcss
-```
-
-src/App.scss
-```scss
-div {
-  color: red;
-}
-```
-
-rollup.config.js
-```js
-import sveltePreprocess from 'svelte-preprocess';
-
-  plugins: [
-    svelte({
-      preprocess: sveltePreprocess()
-    })
-```
-
-src/App.svelte
-```svelte
-<style global lang="scss">
-@import 'src/App.scss';
-</style>
-```
-* ❕ `모든 .svelte 파일`에서 사용할 `.scss 파일`은 `global`속성 안에서 선언 해야 한다.
-
-#### `lang="scss"` 오류 설정
-```sh
-확장 > Svelte for VS Code > 확장 설정 > Svelte › Language-server: Ls-path
-  Windows: C:\Program Files\nodejs
-  Mac: /Users/사용자/.nvm/versions/node/v14.15.1/bin/node
-```
-* ❕ `Mac`은 터미널에서 `which node` 명령으로 `Node` 경로 확인 가능
-* ❕ `VSCode` 재시작
 
 # 수고 하셨습니다.
