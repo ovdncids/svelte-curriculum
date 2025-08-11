@@ -165,43 +165,31 @@ input[type=text] {
 ## Svelte Component 만들기
 Header.svelte, Nav.svelte, Footer.svelte 이렇게 Component 별로 파일을 나눈다.
 
-src/App.svelte
+src/routes/+layout.svelte
 ```svelte
 <script>
-import Header from './components/Header.svelte';
-import Nav from './components/Nav.svelte';
-import Footer from './components/Footer.svelte';
+import Header from './Header.svelte';
 </script>
 ```
 
-src/components/Header.svelte
+src/routes/Header.svelte
 ```html
 <header>
   <h1>Svelte study</h1>
 </header>
 ```
 
-src/App.svelte
+src/routes/+layout.svelte
 ```diff
 - <header>
 -  <h1>Svelte study</h1>
 - </header>
 + <Header></Header>
-
-- <nav class="nav">
--   <ul>
--     <li><h2>Users</h2></li>
--     <li><h2>Search</h2></li>
--   </ul>
-- </nav>
-+ <Nav></Nav>
-
-- <footer>Copyright</footer>
-+ <Footer></Footer>
 ```
+* `Nav.svelte`, `Footer.svelte` 만들어 보기
 
 ### #if, props
-src/App.svelte
+src/routes/+layout.svelte
 ```svelte
 {#if false}
 <Header></Header>
@@ -210,10 +198,10 @@ src/App.svelte
 <Footer title={'카피라이트'}></Footer>
 ```
 
-src/components/Footer.svelte (덮어 씌우기)
+src/routes/Footer.svelte (덮어 씌우기)
 ```svelte
-<script>
-export let title;
+<script lang="ts">
+  export let title: string;
 </script>
 
 <footer>{title || 'Copyright'}</footer>
