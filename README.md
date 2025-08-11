@@ -207,44 +207,20 @@ src/routes/Footer.svelte (덮어 씌우기)
 <footer>{title || 'Copyright'}</footer>
 ```
 
-## svelte-spa-router
-https://github.com/ItalyPaleAle/svelte-spa-router
-<!--
-https://www.routify.dev
--->
+## Routes 만들기
+src/routes/+page.svelte (덮어 씌우기)
+```svelte
+<script lang="ts">
+  import { goto } from '$app/navigation';
+  import { onMount } from 'svelte';
 
-### 설치
-```sh
-npm install svelte-spa-router
-```
-
-### Router 만들기
-src/routes.js
-```js
-import Home from './components/contents/Home.svelte';
-import Users from './components/contents/Users.svelte';
-import Search from './components/contents/Search.svelte';
-
-const routes = {
-  '/': Home,
-  '/users': Users,
-  '/search': Search
-};
-
-export default routes;
-```
-
-src/components/contents/Home.svelte
-```html
-<script>
-import {replace} from 'svelte-spa-router';
-
-replace('/users');
+  onMount(() => {
+    goto('/users');
+  });
 </script>
 ```
-* `replace`는 주소 창에서 `/#/home` history가 남지 않는다.
 
-src/components/contents/Users.svelte
+src/routes/users/+page.svelte
 ```html
 <div>
   <h3>Users</h3>
@@ -252,37 +228,32 @@ src/components/contents/Users.svelte
 </div>
 ```
 
-src/components/contents/Search.svelte (동일)
+src/routes/search/+page.svelte (동일)
 
-src/App.svelte
-```js
-import Router from 'svelte-spa-router';
-import routes from './routes';
-```
+src/routes/+layout.svelte
 ```diff
   <section class="contents">
 -   <div>
 -     <h3>Users</h3>
 -     <p>Contents</p>
 -   </div>
-+   <Router {routes} />
++   {@render children?.()}
 ```
 
 **주소 창에서 router 바꾸어 보기**
-* http://localhost:8080/#/users
+* http://localhost:8080/search
 
-src/components/Nav.svelte (덮어 씌우기)
+src/routes/Nav.svelte (덮어 씌우기)
 ```svelte
-<script>
-import {link} from 'svelte-spa-router'
-import active from 'svelte-spa-router/active'
+<script lang="ts">
+  import { getStores } from '$app/stores';
+  const { page } = getStores();
 </script>
 
 <nav class="nav">
   <ul>
-    <li><h2><a href="/users" use:link use:active>Users</a></h2></li>
-    <li><h2><a href="/search" use:link use:active>Search</a></h2></li>
-    <!-- <li href="/search" use:active><h2><a href="/search" use:link use:active>Search</a></h2></li> li에 active를 넣어야 하는 경우 -->
+    <li><h2><a href="/users" class:active={$page.url.pathname === '/users'}>Users</a></h2></li>
+    <li><h2><a href="/search" class:active={$page.url.pathname === '/search'}>Search</a></h2></li>
   </ul>
 </nav>
 ```
